@@ -1,8 +1,7 @@
 import axios from "axios";
+import { API_BASE_URL } from "@/lib/apiConfig";
 
-// Django backend URL - change this to your production URL
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+
 
 // Create axios instance
 const api = axios.create({
