@@ -22,7 +22,7 @@ export const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
   login: async () => {},
-  signup: async () => {},
+  signup: async () => undefined,
   logout: () => {},
   isAuthenticated: false,
 });
