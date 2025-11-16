@@ -423,7 +423,6 @@ export default function PostsPage() {
     total: posts.length,
     posted: posts.filter((p) => p.posted).length,
     pending: posts.filter((p) => !p.posted).length,
-    failed: posts.filter((p) => p.status === "failed").length,
   };
 
   if (loading) {
