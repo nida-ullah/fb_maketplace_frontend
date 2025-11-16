@@ -687,7 +687,7 @@ export default function PostsPage() {
                             <span className="font-medium">Account:</span>{" "}
                             {post.account.email}
                           </div>
-                          {post.retry_count > 0 && (
+                          {post.retry_count && post.retry_count > 0 && (
                             <div className="text-xs text-orange-600 mt-1">
                               Retries: {post.retry_count}
                             </div>
