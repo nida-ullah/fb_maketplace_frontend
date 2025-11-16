@@ -84,7 +84,7 @@ export default function SignupPage() {
       const result = await signup(data.name, data.email, data.password);
 
       // Check if approval is required
-      if (result && result.message) {
+      if (result?.message) {
         setSuccess(result.message);
       }
       // If no result, user was redirected to dashboard (old flow)
