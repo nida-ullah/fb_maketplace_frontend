@@ -22,6 +22,7 @@ export interface MarketplacePost {
   image?: string;
   scheduled_time: string;
   posted: boolean;
+  retry_count?: number;
   created_at?: string;
   updated_at?: string;
 }
