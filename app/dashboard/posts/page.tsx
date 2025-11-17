@@ -170,7 +170,10 @@ export default function PostsPage() {
     try {
       setLoading(true);
       const response = await postsAPI.list();
-      setPosts(Array.isArray(response.data) ? response.data : []);
+      console.log("Posts API Response:", response.data);
+      // Handle Django REST Framework pagination
+      const postsData = response.data.results || response.data;
+      setPosts(Array.isArray(postsData) ? postsData : []);
     } catch (err) {
       showError("Failed to load posts");
       console.error(err);

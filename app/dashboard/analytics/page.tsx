@@ -66,7 +66,9 @@ export default function AnalyticsPage() {
   const fetchAccounts = async () => {
     try {
       const response = await accountsAPI.list();
-      setAccounts(Array.isArray(response.data) ? response.data : []);
+      console.log("Analytics - Accounts API Response:", response.data);
+      const accountsData = response.data.results || response.data;
+      setAccounts(Array.isArray(accountsData) ? accountsData : []);
     } catch (err) {
       console.error("Failed to load accounts", err);
     }
@@ -79,6 +81,7 @@ export default function AnalyticsPage() {
         period,
         selectedAccount || undefined
       );
+      console.log("Analytics API Response:", response.data);
       setAnalytics(response.data);
     } catch (err) {
       console.error("Failed to load analytics", err);

@@ -58,7 +58,10 @@ export default function AccountsPage() {
     try {
       setLoading(true);
       const response = await accountsAPI.list();
-      setAccounts(Array.isArray(response.data) ? response.data : []);
+      console.log("Accounts API Response:", response.data);
+      // Handle Django REST Framework pagination
+      const accountsData = response.data.results || response.data;
+      setAccounts(Array.isArray(accountsData) ? accountsData : []);
     } catch (err) {
       setError("Failed to load accounts");
       console.error(err);
