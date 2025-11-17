@@ -12,6 +12,7 @@ import {
   X,
 } from "lucide-react";
 import { accountsAPI } from "@/lib/api";
+import { API_BASE_URL } from "@/lib/apiConfig";
 
 interface BulkUploadPostsModalProps {
   isOpen: boolean;
@@ -182,16 +183,15 @@ Queen , King and sigle size mattresses and box spring and bed frames and metal f
       });
 
       // Call API with images support
-      const API_URL =
-        process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        `${API_URL}/posts/bulk-upload-with-images/`,
+        `${API_BASE_URL}/posts/bulk-upload-with-images/`,
         {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
+            "ngrok-skip-browser-warning": "true",
           },
           body: formData,
         }
@@ -274,9 +274,18 @@ Queen , King and sigle size mattresses and box spring and bed frames and metal f
                 <div className="text-sm text-blue-800 space-y-2">
                   <p className="font-medium">Bulk upload via TXT file</p>
                   <ol className="list-decimal ml-4 space-y-1">
-                    <li>Prepare a TXT file containing your product entries (formats shown below).</li>
-                    <li>Optionally upload product images. If provided, images must be in the same order as TXT entries.</li>
-                    <li>Select one or more Facebook accounts; the system will create posts for each selected account.</li>
+                    <li>
+                      Prepare a TXT file containing your product entries
+                      (formats shown below).
+                    </li>
+                    <li>
+                      Optionally upload product images. If provided, images must
+                      be in the same order as TXT entries.
+                    </li>
+                    <li>
+                      Select one or more Facebook accounts; the system will
+                      create posts for each selected account.
+                    </li>
                   </ol>
                   <p className="font-medium mt-3">Supported TXT formats</p>
                   <div className="bg-blue-100 p-2 rounded font-mono text-xs overflow-x-auto whitespace-pre-wrap">
@@ -291,12 +300,20 @@ Queen , King and sigle size mattresses and box spring and bed frames and metal f
                     {/* single-line compact example */}
                     Blue sofa | 100-250
                   </div>
-                    <p className="text-xs mt-2">
-                      <strong>Note:</strong> This interface supports two TXT formats: the traditional 3-line format (title, description, price) or the compact single-line format <code>Title | min-max</code> (for example, <code>Blue sofa | 100-250</code>).
-                    </p>
-                    <p className="text-xs mt-1">
-                      When using the compact <code>min-max</code> format, the system will select a random integer price within the specified range for each created post. If you provide a single product line and upload multiple images, the product will be duplicated for each image (one post per image).
-                    </p>
+                  <p className="text-xs mt-2">
+                    <strong>Note:</strong> This interface supports two TXT
+                    formats: the traditional 3-line format (title, description,
+                    price) or the compact single-line format{" "}
+                    <code>Title | min-max</code> (for example,{" "}
+                    <code>Blue sofa | 100-250</code>).
+                  </p>
+                  <p className="text-xs mt-1">
+                    When using the compact <code>min-max</code> format, the
+                    system will select a random integer price within the
+                    specified range for each created post. If you provide a
+                    single product line and upload multiple images, the product
+                    will be duplicated for each image (one post per image).
+                  </p>
                   <button
                     type="button"
                     onClick={downloadSampleTXT}
@@ -471,8 +488,8 @@ Queen , King and sigle size mattresses and box spring and bed frames and metal f
                   💡 <strong>Tip:</strong> Select images in the SAME ORDER as
                   your TXT rows. The app will automatically match them: 1st
                   image → 1st product, 2nd image → 2nd product, etc. If you
-                  provide a single-line product and multiple images, the
-                  product will be replicated for each image.
+                  provide a single-line product and multiple images, the product
+                  will be replicated for each image.
                 </p>
               </div>
             </div>

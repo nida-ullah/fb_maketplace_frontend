@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "./ui/Button";
 import { X, Upload } from "lucide-react";
 import { postsAPI, accountsAPI } from "@/lib/api";
+import { API_BASE_URL } from "@/lib/apiConfig";
 import Image from "next/image";
 import type { MarketplacePost } from "@/types";
 
@@ -39,7 +40,7 @@ export default function EditPostModal({
       fullImageUrl = imageUrl.replace("http://", "https://");
     } else if (!imageUrl.startsWith("https://")) {
       // Otherwise, prepend the backend base URL for relative URLs
-      const backendUrl = "https://thuy-butlerlike-subculturally.ngrok-free.dev";
+      const backendUrl = API_BASE_URL.replace(/\/api$/, "");
       fullImageUrl = `${backendUrl}${
         imageUrl.startsWith("/") ? "" : "/"
       }${imageUrl}`;

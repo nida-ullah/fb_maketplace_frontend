@@ -2,14 +2,15 @@
 
 import React, { useEffect, useState } from "react";
 import { PostingJob } from "@/types";
+import { API_BASE_URL } from "@/lib/apiConfig";
 
 interface PostingProgressProps {
   jobId: string;
   onComplete?: () => void;
 }
 
-// Backend base URL (without /api suffix)
-const BACKEND_URL = "https://thuy-butlerlike-subculturally.ngrok-free.dev";
+// Backend base URL (without /api suffix) - remove /api from the end
+const BACKEND_URL = API_BASE_URL.replace(/\/api$/, "");
 
 export default function PostingProgress({
   jobId,
