@@ -170,7 +170,7 @@ export default function PostsPage() {
     try {
       setLoading(true);
       const response = await postsAPI.list();
-      setPosts(response.data);
+      setPosts(Array.isArray(response.data) ? response.data : []);
     } catch (err) {
       showError("Failed to load posts");
       console.error(err);

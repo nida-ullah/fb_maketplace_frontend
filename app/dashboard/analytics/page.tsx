@@ -66,7 +66,7 @@ export default function AnalyticsPage() {
   const fetchAccounts = async () => {
     try {
       const response = await accountsAPI.list();
-      setAccounts(response.data);
+      setAccounts(Array.isArray(response.data) ? response.data : []);
     } catch (err) {
       console.error("Failed to load accounts", err);
     }
@@ -104,9 +104,10 @@ export default function AnalyticsPage() {
   }
 
   const successRate =
-    analytics.summary.total_created > 0
+    analytics?.summary?.total_created && analytics.summary.total_created > 0
       ? Math.round(
-          (analytics.summary.total_posted / analytics.summary.total_created) *
+          ((analytics.summary.total_posted || 0) /
+            analytics.summary.total_created) *
             100
         )
       : 0;
@@ -220,7 +221,7 @@ export default function AnalyticsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-3xl font-bold text-gray-900">
-                  {analytics.summary.total_created}
+                  {analytics?.summary?.total_created || 0}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
                   All time posts created
@@ -241,7 +242,7 @@ export default function AnalyticsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-3xl font-bold text-gray-900">
-                  {analytics.summary.total_posted}
+                  {analytics?.summary?.total_posted || 0}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
                   Successfully posted
@@ -262,7 +263,7 @@ export default function AnalyticsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-3xl font-bold text-gray-900">
-                  {analytics.summary.currently_pending}
+                  {analytics?.summary?.currently_pending || 0}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
                   Waiting to be posted
@@ -304,7 +305,7 @@ export default function AnalyticsPage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {analytics.by_account.length === 0 ? (
+          {!analytics?.by_account || analytics.by_account.length === 0 ? (
             <p className="text-center text-gray-500 py-8">
               No account data available
             </p>
@@ -465,7 +466,7 @@ export default function AnalyticsPage() {
                   Currently Posted
                 </span>
                 <span className="font-bold text-green-600">
-                  {analytics.summary.currently_posted}
+                  {analytics?.summary?.currently_posted || 0}
                 </span>
               </div>
               <div className="flex justify-between items-center p-3 bg-yellow-50 rounded-lg">
@@ -474,7 +475,7 @@ export default function AnalyticsPage() {
                   Currently Pending
                 </span>
                 <span className="font-bold text-yellow-600">
-                  {analytics.summary.currently_pending}
+                  {analytics?.summary?.currently_pending || 0}
                 </span>
               </div>
             </div>
@@ -490,7 +491,7 @@ export default function AnalyticsPage() {
               <div className="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
                 <span className="text-gray-700">Total Posts Created</span>
                 <span className="font-bold text-blue-600">
-                  {analytics.summary.total_created}
+                  {analytics?.summary?.total_created || 0}
                 </span>
               </div>
               <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg">
