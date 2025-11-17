@@ -28,6 +28,27 @@ export default function EditPostModal({
   onToast,
   post,
 }: EditPostModalProps) {
+  // Helper function to get full image URL via proxy
+  const getImageUrl = (imageUrl: string | null | undefined): string => {
+    if (!imageUrl) return "";
+
+    let fullImageUrl = imageUrl;
+
+    // If it's an http URL, convert to https
+    if (imageUrl.startsWith("http://")) {
+      fullImageUrl = imageUrl.replace("http://", "https://");
+    } else if (!imageUrl.startsWith("https://")) {
+      // Otherwise, prepend the backend base URL for relative URLs
+      const backendUrl = "https://thuy-butlerlike-subculturally.ngrok-free.dev";
+      fullImageUrl = `${backendUrl}${
+        imageUrl.startsWith("/") ? "" : "/"
+      }${imageUrl}`;
+    }
+
+    // Use image proxy to add the ngrok-skip-browser-warning header
+    return `/api/image-proxy?url=${encodeURIComponent(fullImageUrl)}`;
+  };
+
   const [accounts, setAccounts] = useState<FacebookAccount[]>([]);
   const [formData, setFormData] = useState({
     title: "",
@@ -52,7 +73,7 @@ export default function EditPostModal({
           typeof post.account === "object" ? post.account.id : post.account,
         posted: post.posted || false,
       });
-      setImagePreview(post.image || "");
+      setImagePreview(getImageUrl(post.image));
       setImage(null);
       fetchAccounts();
     }

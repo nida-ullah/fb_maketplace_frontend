@@ -8,6 +8,9 @@ interface PostingProgressProps {
   onComplete?: () => void;
 }
 
+// Backend base URL (without /api suffix)
+const BACKEND_URL = "https://thuy-butlerlike-subculturally.ngrok-free.dev";
+
 export default function PostingProgress({
   jobId,
   onComplete,
@@ -25,7 +28,7 @@ export default function PostingProgress({
     try {
       // Server-Sent Events (SSE) connection for real-time updates
       eventSource = new EventSource(
-        `http://localhost:8000/api/posts/status-stream/${jobId}/`
+        `${BACKEND_URL}/api/posts/status-stream/${jobId}/`
       );
 
       eventSource.onopen = () => {
@@ -77,10 +80,11 @@ export default function PostingProgress({
         try {
           const token = localStorage.getItem("token");
           const response = await fetch(
-            `http://localhost:8000/api/posts/job-status/${jobId}/`,
+            `${BACKEND_URL}/api/posts/job-status/${jobId}/`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
+                "ngrok-skip-browser-warning": "true",
               },
             }
           );

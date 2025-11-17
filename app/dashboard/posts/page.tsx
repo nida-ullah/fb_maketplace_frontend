@@ -13,7 +13,6 @@ import {
   Edit,
   Image as ImageIcon,
 } from "lucide-react";
-import Image from "next/image";
 import CreatePostModal from "@/components/CreatePostModal";
 import EditPostModal from "@/components/EditPostModal";
 import BulkUploadPostsModal from "@/components/BulkUploadPostsModal";
@@ -24,6 +23,32 @@ import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import type { MarketplacePost } from "@/types";
 
 export default function PostsPage() {
+  // Helper function to get full image URL via proxy
+  const getImageUrl = (imageUrl: string | null | undefined): string | null => {
+    if (!imageUrl) {
+      console.log("No image URL provided");
+      return null;
+    }
+
+    let fullImageUrl = imageUrl;
+
+    // If it's an http URL, convert to https
+    if (imageUrl.startsWith("http://")) {
+      fullImageUrl = imageUrl.replace("http://", "https://");
+    } else if (!imageUrl.startsWith("https://")) {
+      // Otherwise, prepend the backend base URL for relative URLs
+      const backendUrl = "https://thuy-butlerlike-subculturally.ngrok-free.dev";
+      fullImageUrl = `${backendUrl}${
+        imageUrl.startsWith("/") ? "" : "/"
+      }${imageUrl}`;
+    }
+
+    // Use image proxy to add the ngrok-skip-browser-warning header
+    const proxyUrl = `/api/image-proxy?url=${encodeURIComponent(fullImageUrl)}`;
+    console.log("Image URL via proxy:", imageUrl, "→", proxyUrl);
+    return proxyUrl;
+  };
+
   const [posts, setPosts] = useState<MarketplacePost[]>([]);
   const [loading, setLoading] = useState(true);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -651,13 +676,18 @@ export default function PostsPage() {
                           aria-label={`Select post: ${post.title}`}
                         />
                         <div className="relative w-16 h-16 flex-shrink-0 bg-gray-200 rounded overflow-hidden">
-                          {post.image ? (
-                            <Image
-                              src={post.image}
+                          {getImageUrl(post.image) ? (
+                            <img
+                              src={getImageUrl(post.image)!}
                               alt={post.title}
-                              fill
-                              className="object-cover"
-                              sizes="64px"
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                console.error(
+                                  "Failed to load image:",
+                                  getImageUrl(post.image)
+                                );
+                                e.currentTarget.style.display = "none";
+                              }}
                             />
                           ) : (
                             <div className="flex items-center justify-center h-full">
@@ -798,13 +828,18 @@ export default function PostsPage() {
                           aria-label={`Select posted item: ${post.title}`}
                         />
                         <div className="relative w-16 h-16 flex-shrink-0 bg-gray-200 rounded overflow-hidden">
-                          {post.image ? (
-                            <Image
-                              src={post.image}
+                          {getImageUrl(post.image) ? (
+                            <img
+                              src={getImageUrl(post.image)!}
                               alt={post.title}
-                              fill
-                              className="object-cover"
-                              sizes="64px"
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                console.error(
+                                  "Failed to load image:",
+                                  getImageUrl(post.image)
+                                );
+                                e.currentTarget.style.display = "none";
+                              }}
                             />
                           ) : (
                             <div className="flex items-center justify-center h-full">

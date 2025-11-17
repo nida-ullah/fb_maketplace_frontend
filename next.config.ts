@@ -11,6 +11,14 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "thuy-butlerlike-subculturally.ngrok-free.dev",
+      },
+      {
+        protocol: "https",
+        hostname: "*.ngrok-free.dev",
+      },
+      {
+        protocol: "https",
         hostname: "drive.google.com",
       },
       {
