@@ -23,7 +23,6 @@ export default function PostingProgress({
   useEffect(() => {
     let eventSource: EventSource | null = null;
     let pollInterval: NodeJS.Timeout | null = null;
-    let usePolling = false;
 
     // Try SSE first, fallback to polling if it fails
     try {
@@ -36,7 +35,6 @@ export default function PostingProgress({
         console.log("✅ SSE connection established");
         setIsConnected(true);
         setError(null);
-        usePolling = false;
       };
 
       eventSource.onmessage = (event) => {
@@ -61,16 +59,15 @@ export default function PostingProgress({
         }
       };
 
-      eventSource.onerror = (err) => {
+      eventSource.onerror = () => {
         console.warn("⚠️ SSE not available, falling back to polling");
         setIsConnected(false);
         eventSource?.close();
-        usePolling = true;
 
         // Start polling as fallback
         startPolling();
       };
-    } catch (err) {
+    } catch {
       console.warn("⚠️ SSE not supported, using polling");
       startPolling();
     }

@@ -88,7 +88,7 @@ export default function ImportSessionModal({
       let parsedData;
       try {
         parsedData = JSON.parse(sessionData);
-      } catch (parseError) {
+      } catch {
         setError(
           "Invalid JSON format. Please paste valid JSON data from your browser session export."
         );

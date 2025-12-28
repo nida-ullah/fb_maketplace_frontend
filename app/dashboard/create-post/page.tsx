@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { accountsAPI, postsAPI } from "@/lib/api";
+import { accountsAPI } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -37,7 +37,6 @@ export default function CreatePostPage() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState("");
   const [imagePreview, setImagePreview] = useState("");
-  const [useImageUrl, setUseImageUrl] = useState(false);
 
   // Validation errors
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -87,7 +86,6 @@ export default function CreatePostPage() {
     if (file) {
       setImageFile(file);
       setImagePreview(URL.createObjectURL(file));
-      setUseImageUrl(false);
       setImageUrl("");
     }
   };
@@ -97,7 +95,6 @@ export default function CreatePostPage() {
     setImageUrl(url);
     if (url) {
       setImagePreview(url);
-      setUseImageUrl(true);
       setImageFile(null);
     }
   };
@@ -149,15 +146,11 @@ export default function CreatePostPage() {
         formData.append("image_url", imageUrl);
       }
 
-      const response = await api.post(
-        "/posts/create-for-accounts/",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await api.post("/posts/create-for-accounts/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       alert(
         response.data.message ||
@@ -167,7 +160,8 @@ export default function CreatePostPage() {
     } catch (err: any) {
       console.error("Failed to create posts:", err);
       const errorMessage =
-        err.response?.data?.error || "Failed to create posts. Please try again.";
+        err.response?.data?.error ||
+        "Failed to create posts. Please try again.";
       alert(errorMessage);
     } finally {
       setSubmitting(false);
@@ -326,7 +320,9 @@ export default function CreatePostPage() {
                 }`}
               />
               {errors.description && (
-                <p className="mt-1 text-sm text-red-600">{errors.description}</p>
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.description}
+                </p>
               )}
             </div>
 
@@ -443,15 +439,14 @@ export default function CreatePostPage() {
                 </div>
               </div>
               <div>
-                <h3 className="font-semibold text-blue-900 mb-1">
-                  📝 Note:
-                </h3>
+                <h3 className="font-semibold text-blue-900 mb-1">📝 Note:</h3>
                 <p className="text-sm text-blue-800">
                   This post will be created for{" "}
-                  <strong>all {selectedAccounts.length} selected account(s)</strong>{" "}
-                  and will be scheduled for{" "}
-                  <strong>immediate posting</strong>. If you select 3
-                  accounts, 3 identical posts will be created.
+                  <strong>
+                    all {selectedAccounts.length} selected account(s)
+                  </strong>{" "}
+                  and will be scheduled for <strong>immediate posting</strong>.
+                  If you select 3 accounts, 3 identical posts will be created.
                 </p>
               </div>
             </div>
