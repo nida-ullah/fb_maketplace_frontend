@@ -14,9 +14,11 @@ import {
   RefreshCw,
   UserPlus,
   X,
+  FileJson,
 } from "lucide-react";
 import AddAccountModal from "@/components/AddAccountModal";
 import BulkUploadModal from "@/components/BulkUploadModal";
+import ImportSessionModal from "@/components/ImportSessionModal";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 
 interface FacebookAccount {
@@ -32,6 +34,7 @@ export default function AccountsPage() {
   const [error, setError] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isBulkUploadOpen, setIsBulkUploadOpen] = useState(false);
+  const [isImportSessionOpen, setIsImportSessionOpen] = useState(false);
   const [isManualLoginOpen, setIsManualLoginOpen] = useState(false);
   const [manualLoginEmail, setManualLoginEmail] = useState("");
   const [manualLoginLoading, setManualLoginLoading] = useState(false);
@@ -58,10 +61,7 @@ export default function AccountsPage() {
     try {
       setLoading(true);
       const response = await accountsAPI.list();
-      console.log("Accounts API Response:", response.data);
-      // Handle Django REST Framework pagination
-      const accountsData = response.data.results || response.data;
-      setAccounts(Array.isArray(accountsData) ? accountsData : []);
+      setAccounts(response.data);
     } catch (err) {
       setError("Failed to load accounts");
       console.error(err);
@@ -276,6 +276,25 @@ export default function AccountsPage() {
         onSuccess={fetchAccounts}
       />
 
+      {/* Import Session Modal */}
+      <ImportSessionModal
+        isOpen={isImportSessionOpen}
+        onClose={() => setIsImportSessionOpen(false)}
+        onSuccess={(message, type) => {
+          fetchAccounts();
+          setConfirmDialog({
+            isOpen: true,
+            title: type === "success" ? "Import Successful" : "Import Failed",
+            message: message,
+            type: type === "success" ? "success" : "danger",
+            confirmText: "OK",
+            onConfirm: () => {
+              setConfirmDialog((prev) => ({ ...prev, isOpen: false }));
+            },
+          });
+        }}
+      />
+
       {/* Manual Login Modal */}
       {isManualLoginOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
@@ -392,6 +411,13 @@ export default function AccountsPage() {
           >
             <Upload size={20} />
             Upload Multiple Accounts
+          </Button>
+          <Button
+            onClick={() => setIsImportSessionOpen(true)}
+            className="flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white"
+          >
+            <FileJson size={20} />
+            Import Session
           </Button>
           <Button
             onClick={() => setIsManualLoginOpen(true)}

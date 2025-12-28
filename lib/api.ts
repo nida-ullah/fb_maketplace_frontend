@@ -1,12 +1,13 @@
 import axios from "axios";
-import { API_BASE_URL } from "@/lib/apiConfig";
+import { API_BASE_URL } from "./apiConfig";
+
+// Django backend URL - configured in apiConfig.ts
 
 // Create axios instance
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
-    "ngrok-skip-browser-warning": "true", // Skip ngrok browser warning page
   },
 });
 
@@ -121,6 +122,9 @@ export const accountsAPI = {
       },
     });
   },
+
+  importSession: (data: { session_data: any; filename: string }) =>
+    api.post("/accounts/import-session/", data),
 };
 
 export const postsAPI = {
