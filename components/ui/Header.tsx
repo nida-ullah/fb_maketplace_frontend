@@ -13,6 +13,7 @@ import {
   Menu,
   X,
   ChevronDown,
+  RefreshCw,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useState, useEffect, useRef } from "react";
@@ -21,6 +22,7 @@ const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Accounts", href: "/dashboard/accounts", icon: Users },
   { name: "Posts", href: "/dashboard/posts", icon: FileText },
+  { name: "Renew", href: "/dashboard/renew", icon: RefreshCw },
   { name: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
   { name: "Settings", href: "/dashboard/settings", icon: Settings },
 ];

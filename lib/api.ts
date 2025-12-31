@@ -125,6 +125,9 @@ export const accountsAPI = {
 
   importSession: (data: { session_data: any; filename: string }) =>
     api.post("/accounts/import-session/", data),
+
+  renewListings: (data: { account_ids: number[]; renewal_count: number }) =>
+    api.post("/accounts/renew-listings/", data),
 };
 
 export const postsAPI = {
